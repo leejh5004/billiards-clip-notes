@@ -63,24 +63,8 @@ function stripJosa(token: string): string {
   return result;
 }
 
-function getParts(memo: string): string[] {
-  const parts: string[] = [];
-  for (const segment of memo.split(/\s+/).filter(Boolean)) {
-    const hasForeignLetter = [...segment].some(
-      (ch) => /\p{L}/u.test(ch) && !/[가-힣a-zA-Z]/.test(ch),
-    );
-    if (hasForeignLetter) continue;
-    if (/^[가-힣a-zA-Z0-9]+$/.test(segment)) {
-      parts.push(segment);
-      continue;
-    }
-    parts.push(...segment.split(/[^가-힣a-zA-Z0-9]+/).filter(Boolean));
-  }
-  return parts;
-}
-
 export function extractKeywords(memo: string): string[] {
-  const parts = getParts(memo);
+  const parts = memo.normalize("NFC").split(/[^가-힣a-zA-Z0-9]+/).filter(Boolean);
   const seen = new Set<string>();
   const keywords: string[] = [];
 

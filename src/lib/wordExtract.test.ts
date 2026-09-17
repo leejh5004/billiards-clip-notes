@@ -32,6 +32,8 @@ test("strips josa at most once per side", () => {
   expect(extractKeywords("각도가 안 맞았다")).toEqual(["각도", "맞았다"]);
 });
 
-test("keeps only hangul, english, and digits", () => {
-  expect(extractKeywords("прямо ドロー 漢字 café 배치")).toEqual(["배치"]);
+test("treats foreign characters as separators", () => {
+  expect(extractKeywords("끌어치기ㅋㅋ 배치")).toEqual(["끌어치기", "배치"]);
+  expect(extractKeywords("café배치 끌어치기")).toEqual(["caf", "배치", "끌어치기"]);
+  expect(extractKeywords("прямо ドロー 漢字 café 배치")).toEqual(["caf", "배치"]);
 });
