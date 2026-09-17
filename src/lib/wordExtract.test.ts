@@ -20,7 +20,7 @@ test("drops listed stopwords", () => {
 });
 
 test("lowercases english and splits on punctuation", () => {
-  expect(extractKeywords("Draw! Draw 샷")).toEqual(["draw", "샷"]);
+  expect(extractKeywords("Draw! Draw 샷")).toEqual(["draw"]);
 });
 
 test("empty memo yields no keywords", () => {

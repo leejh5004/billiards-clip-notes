@@ -69,9 +69,6 @@ function stripJosa(token: string): string {
 
 export function extractKeywords(memo: string): string[] {
   const parts = memo.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
-  const hasLatinWord = parts.some(
-    (part) => /[A-Za-z]/.test(part) && stripJosa(part).toLowerCase().length >= 2,
-  );
   const seen = new Set<string>();
   const keywords: string[] = [];
 
@@ -79,11 +76,7 @@ export function extractKeywords(memo: string): string[] {
     const stripped = stripJosa(part).toLowerCase();
     if (!stripped) continue;
     if (!/^[\p{L}\p{N}]+$/u.test(stripped)) continue;
-    if (
-      [...stripped].length < 2 &&
-      !(hasLatinWord && !/^[a-z]+$/.test(stripped))
-    )
-      continue;
+    if ([...stripped].length < 2) continue;
     if (STOPWORDS.has(stripped)) continue;
     if (seen.has(stripped)) continue;
     seen.add(stripped);
