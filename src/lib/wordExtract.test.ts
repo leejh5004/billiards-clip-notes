@@ -27,3 +27,11 @@ test("empty memo yields no keywords", () => {
   expect(extractKeywords("")).toEqual([]);
   expect(extractKeywords("   ")).toEqual([]);
 });
+
+test("strips josa at most once per side", () => {
+  expect(extractKeywords("각도가 안 맞았다")).toEqual(["각도", "맞았다"]);
+});
+
+test("keeps only hangul, english, and digits", () => {
+  expect(extractKeywords("прямо ドロー 漢字 café 배치")).toEqual(["배치"]);
+});

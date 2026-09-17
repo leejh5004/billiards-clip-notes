@@ -48,34 +48,46 @@ const STOPWORDS = new Set([
 
 function stripJosa(token: string): string {
   let result = token;
-  let changed = true;
-  while (changed && result.length > 0) {
-    changed = false;
-    for (const josa of JOSA) {
-      if (result.endsWith(josa)) {
-        result = result.slice(0, -josa.length);
-        changed = true;
-        break;
-      }
-      if (result.startsWith(josa)) {
-        result = result.slice(josa.length);
-        changed = true;
-        break;
-      }
+  for (const josa of JOSA) {
+    if (result.endsWith(josa)) {
+      result = result.slice(0, -josa.length);
+      break;
+    }
+  }
+  for (const josa of JOSA) {
+    if (result.startsWith(josa)) {
+      result = result.slice(josa.length);
+      break;
     }
   }
   return result;
 }
 
+function getParts(memo: string): string[] {
+  const parts: string[] = [];
+  for (const segment of memo.split(/\s+/).filter(Boolean)) {
+    const hasForeignLetter = [...segment].some(
+      (ch) => /\p{L}/u.test(ch) && !/[가-힣a-zA-Z]/.test(ch),
+    );
+    if (hasForeignLetter) continue;
+    if (/^[가-힣a-zA-Z0-9]+$/.test(segment)) {
+      parts.push(segment);
+      continue;
+    }
+    parts.push(...segment.split(/[^가-힣a-zA-Z0-9]+/).filter(Boolean));
+  }
+  return parts;
+}
+
 export function extractKeywords(memo: string): string[] {
-  const parts = memo.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  const parts = getParts(memo);
   const seen = new Set<string>();
   const keywords: string[] = [];
 
   for (const part of parts) {
     const stripped = stripJosa(part).toLowerCase();
     if (!stripped) continue;
-    if (!/^[\p{L}\p{N}]+$/u.test(stripped)) continue;
+    if (!/^[가-힣a-zA-Z0-9]+$/.test(stripped)) continue;
     if ([...stripped].length < 2) continue;
     if (STOPWORDS.has(stripped)) continue;
     if (seen.has(stripped)) continue;
