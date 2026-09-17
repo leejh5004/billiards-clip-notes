@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/billiards-clip-notes/sw.js', { scope: '/billiards-clip-notes/' })})}
