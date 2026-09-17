@@ -46,7 +46,10 @@ const STOPWORDS = new Set([
   "않다",
 ]);
 
+const PROTECTED = new Set(["두께", "각도", "속도", "높이", "길이", "가로", "세로"]);
+
 function stripJosa(token: string): string {
+  if (PROTECTED.has(token)) return token;
   for (const josa of JOSA) {
     if (token.endsWith(josa)) {
       return token.slice(0, -josa.length);

@@ -46,3 +46,8 @@ test("normalizes nfd hangul so apple-style input still extracts", () => {
   const nfd = "배치".normalize("NFD");
   expect(extractKeywords(nfd + " 끌어치기")).toEqual(["배치", "끌어치기"]);
 });
+
+test("keeps billiards nouns that look like they end in josa", () => {
+  expect(extractKeywords("두께 각도 속도")).toEqual(["두께", "각도", "속도"]);
+  expect(extractKeywords("두께를 두껍게")).toEqual(["두께", "두껍게"]);
+});

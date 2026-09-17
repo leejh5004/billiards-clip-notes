@@ -90,8 +90,8 @@ export default function EditorPage() {
       return;
     }
     const now = Date.now();
-    const entryId = id ?? crypto.randomUUID();
     try {
+      const entryId = id ?? crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
       await saveEntry({
         id: entryId,
         createdAt: createdAt ?? now,
