@@ -37,3 +37,12 @@ test("treats foreign characters as separators", () => {
   expect(extractKeywords("café배치 끌어치기")).toEqual(["caf", "배치", "끌어치기"]);
   expect(extractKeywords("прямо ドロー 漢字 café 배치")).toEqual(["caf", "배치"]);
 });
+
+test("does not strip leading syllables that look like josa", () => {
+  expect(extractKeywords("와이드 밀어치기")).toEqual(["와이드", "밀어치기"]);
+});
+
+test("normalizes nfd hangul so apple-style input still extracts", () => {
+  const nfd = "배치".normalize("NFD");
+  expect(extractKeywords(nfd + " 끌어치기")).toEqual(["배치", "끌어치기"]);
+});

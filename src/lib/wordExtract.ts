@@ -47,20 +47,12 @@ const STOPWORDS = new Set([
 ]);
 
 function stripJosa(token: string): string {
-  let result = token;
   for (const josa of JOSA) {
-    if (result.endsWith(josa)) {
-      result = result.slice(0, -josa.length);
-      break;
+    if (token.endsWith(josa)) {
+      return token.slice(0, -josa.length);
     }
   }
-  for (const josa of JOSA) {
-    if (result.startsWith(josa)) {
-      result = result.slice(josa.length);
-      break;
-    }
-  }
-  return result;
+  return token;
 }
 
 export function extractKeywords(memo: string): string[] {
